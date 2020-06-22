@@ -25,7 +25,7 @@ def _error_handler(e, code):
 
 @api.errorhandler(DataValidationError)
 def data_validation_error_handler(e):
-    return _error_handler(e, 403)
+    return _error_handler(e, 400)
 
 
 @api.errorhandler(ResourceNotFound)

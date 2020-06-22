@@ -15,7 +15,8 @@ class Shorten(Resource):
     @api.expect(model.url, validate=True)
     @api.marshal_with(model.shorten_url, code=201)
     @api.response(201, 'Success')
-    @api.response(403, 'DataValidationError')
+    @api.response(400, 'DataValidationError')
+    @api.response(404, 'ResourceNotFound')
     def post(self):
         '''
         Shortener a URL.
