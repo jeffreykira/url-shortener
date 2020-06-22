@@ -7,5 +7,5 @@ url = api.model('url', {
 })
 
 shorten_url = api.model('shorten_url', {
-    'shorten_url': fields.String(required=True, descirption='shorten url', example='')
+    'short_url': fields.String(required=True, descirption='short url', example='http://shorturl.at/zxcvb')
 })

@@ -3,6 +3,7 @@ import importlib
 import logging
 import os
 from url_shortener import app_config
+from url_shortener import utils
 from url_shortener.exception import *
 
 log = logging.getLogger(__name__)
@@ -32,6 +33,7 @@ def resource_not_found_error_handler(e):
     return _error_handler(e, 404)
 
 
+@utils.log_scope(log)
 def init(app):
     if not app_config.CONFIG.DEBUG:
         api._doc = False

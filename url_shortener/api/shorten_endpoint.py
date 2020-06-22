@@ -3,6 +3,7 @@ from flask import request
 from flask_restplus import Resource
 from url_shortener.api import shorten_endpoint_model as model
 from url_shortener.api.api_proxy import api
+from url_shortener.domain import shorten as ShortenDomain
 
 log = logging.getLogger(__name__)
 namespace = api.namespace('shorten', description='Shortener service.')
@@ -20,4 +21,5 @@ class Shorten(Resource):
         Shortener a URL.
         '''
         data = request.json
-        return None, 201
+        short_url = ShortenDomain.create(data.get('url'))
+        return {'short_url': short_url}, 201
