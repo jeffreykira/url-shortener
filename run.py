@@ -32,6 +32,24 @@ api_proxy.init(blueprint)
 flask_app.register_blueprint(blueprint)
 
 
+@flask_app.before_request
+def before_request():
+    log.info('request: {}'.format(' '.join([request.remote_addr, request.method, request.url])))
+    if flask_app.config['DEBUG']:
+        g.request_start_time = time.time()
+        g.request_time = lambda: '%.5fs' % (time.time() - g.request_start_time)
+        log.debug('request header: {}'.format(', '.join(': '.join(x) for x in request.headers)))
+        log.debug('request data: {}'.format(request.get_data(as_text=True)))
+
+
+@flask_app.after_request
+def after_request(response):
+    if flask_app.config['DEBUG']:
+        response.headers.add('x-time-elapsed', g.request_time())
+
+    return response
+
+
 if __name__ == '__main__':
     try:
         flask_app.run(host=app_config.CONFIG.SERVER_HOST, port=app_config.CONFIG.SERVER_PORT)
