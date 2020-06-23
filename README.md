@@ -3,6 +3,8 @@
 ## Environment Dependency
 - python3
 - pip install -r requirements.txt
+- docker
+- docker-compose
 
 
 ## Quick Start
