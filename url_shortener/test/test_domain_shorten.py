@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from url_shortener import app_config
 from url_shortener.domain import shorten as ShortenDomain
 from url_shortener.exception import DataValidationError, ResourceNotFound
@@ -17,7 +18,8 @@ class TestDomainShorten(unittest.TestCase):
         self.assertIsInstance(short_code, str)
         self.assertEqual(len(short_code), 5)
 
-    def test_create_shorten_url(self):
+    @patch('url_shortener.database.set_item', return_value=True)
+    def test_create_shorten_url(self, fake_db):
         with self.assertRaises(DataValidationError):
             ShortenDomain.create('www.google.com')
 
