@@ -32,6 +32,18 @@ def create(url):
     short_code = _shorten_code(url)
     short_url = app_config.CONFIG.URL_PREFIX + short_code
 
-    DB.set_item(short_code, url)
+    DB.set_item(short_url, url)
 
     return short_url
+
+
+@utils.log_scope(log)
+def find_one(short_code):
+    if len(short_code) != 5:
+        raise DataValidationError('code length error')
+
+    url = DB.get_item(app_config.CONFIG.URL_PREFIX + short_code)
+    if not url:
+        raise ResourceNotFound('url not fount')
+
+    return url.decode('utf-8')
