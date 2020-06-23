@@ -29,3 +29,11 @@ class TestDomainShorten(unittest.TestCase):
         short_url = ShortenDomain.create('https://www.google.com')
         self.assertIsInstance(short_url, str)
         self.assertTrue(short_url.startswith(app_config.CONFIG.URL_PREFIX))
+
+    @patch('url_shortener.database.get_item', return_value=None)
+    def test_get_original_url(self, fake_db):
+        with self.assertRaises(DataValidationError):
+            ShortenDomain.find_one('zxcvbn')
+
+        with self.assertRaises(ResourceNotFound):
+            ShortenDomain.find_one('zxcvb')

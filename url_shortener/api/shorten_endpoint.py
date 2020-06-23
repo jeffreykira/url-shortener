@@ -24,3 +24,19 @@ class Shorten(Resource):
         data = request.json
         short_url = ShortenDomain.create(data.get('url'))
         return {'short_url': short_url}, 201
+
+
+@namespace.route('/<code>')
+class Item(Resource):
+
+    @api.marshal_with(model.url)
+    @api.response(400, 'DataValidationError')
+    @api.response(404, 'ResourceNotFound')
+    def get(self, code):
+        '''
+        Get original URL.
+
+        If short_url = 'http://shorturl.at/zxcvb', code is 'zxcvb'.
+        '''
+        url = ShortenDomain.find_one(code)
+        return {'url': url}
