@@ -1,0 +1,17 @@
+version: '3'
+
+
+services:
+    database:
+        image: redis:latest
+        container_name: shorten-db
+        restart: on-failure
+        ports:
+            - "6379:6379"
+
+    testdb:
+        image: redis:latest
+        container_name: test-shorten-db
+        restart: on-failure
+        ports:
+            - "12345:12345"

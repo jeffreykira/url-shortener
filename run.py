@@ -7,6 +7,7 @@ import subprocess
 from url_shortener import app_config
 from url_shortener import logging_config
 from url_shortener.api import api_proxy
+from url_shortener import database as DB
 from flask import Flask, Blueprint, request, g
 from shutil import which
 
@@ -22,10 +23,12 @@ if which('docker') is None:
     raise Exception('docker is not installed.')
 if which('docker-compose') is None:
     raise Exception('docker-compose is not installed.')
-# TODO run redis docker
+subprocess.run('docker-compose -f url_shortener/docker-compose.yml up -d database', shell=True)
 
 flask_app = Flask(__name__)
 flask_app.config.from_object(app_config.CONFIG)
+
+DB.init(flask_app)
 
 blueprint = Blueprint('api', __name__, url_prefix='/api/v1')
 api_proxy.init(blueprint)
